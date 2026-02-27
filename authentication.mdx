@@ -1,0 +1,152 @@
+---
+title: API Authentication Guide
+description: Securely authenticate your applications to access Scriptmasters RESTful APIs and SDKs for custom integrations.
+---
+
+## Overview
+
+Scriptmasters provides secure authentication for all API endpoints. Use API keys for simple server-to-server integrations or OAuth 2.0 for user-facing applications. All requests to `https://api.example.com` require authentication to ensure secure access to payment processing, merchant management, and analytics data.
+
+<Callout kind="alert">
+Never expose your API keys or access tokens in client-side code or public repositories. Use server-side proxies or environment variables.
+</Callout>
+
+## Authentication Methods
+
+Choose the method that fits your use case.
+
+<Tabs>
+  <Tab title="API Key" icon="key">
+
+## Generate an API Key
+
+Follow these steps to create your API key.
+
+<Steps>
+  <Step title="Log in to Dashboard" icon="log-in">
+    Access your account at `https://dashboard.example.com`.
+  </Step>
+  <Step title="Navigate to API Settings" icon="settings">
+    Go to **Account** > **API Keys**.
+  </Step>
+  <Step title="Create Key" icon="plus">
+    Click **Generate New Key** and copy the value immediately.
+  </Step>
+</Steps>
+
+## Usage
+
+Include the key in the `Authorization` header.
+
+<ParamField header="Authorization" param-type="string" required="true">
+  Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+<Request tabs="JavaScript,cURL">
+  ```javascript
+  const response = await fetch('https://api.example.com/v1/transactions', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    }
+  });
+  ```
+  ```bash
+  curl -X GET 'https://api.example.com/v1/transactions' \
+    -H 'Authorization: Bearer YOUR_API_KEY' \
+    -H 'Content-Type: application/json'
+  ```
+</Request>
+
+  </Tab>
+  <Tab title="OAuth 2.0" icon="shield">
+
+OAuth 2.0 supports authorization code flow for web apps and client credentials for machine-to-machine.
+
+## Client Credentials Flow
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+  const tokenResponse = await fetch('https://auth.example.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: 'YOUR_CLIENT_ID',
+      client_secret: 'YOUR_CLIENT_SECRET'
+    })
+  });
+  const { access_token } = await tokenResponse.json();
+  ```
+  ```python
+  import requests
+
+  data = {
+      'grant_type': 'client_credentials',
+      'client_id': 'YOUR_CLIENT_ID',
+      'client_secret': 'YOUR_CLIENT_SECRET'
+  }
+  response = requests.post('https://auth.example.com/oauth/token', data=data)
+  access_token = response.json()['access_token']
+  ```
+</CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Role-Based Access Control
+
+Permissions are tied to your API key or token scopes.
+
+<Columns cols={2}>
+  <Card title="Read Only" icon="eye">
+    View transactions and reports.
+  </Card>
+  <Card title="Payments" icon="credit-card">
+    Process charges and refunds.
+  </Card>
+  <Card title="Admin" icon="shield">
+    Manage merchants and keys.
+  </Card>
+</Columns>
+
+| Role       | Transactions | Merchants | Analytics |
+|------------|--------------|-----------|-----------|
+| Read Only  | View         | None      | View      |
+| Payments   | Full         | None      | View      |
+| Admin      | Full         | Full      | Full      |
+
+## Security Best Practices
+
+- Rotate keys every 90 days.
+- Use least privilege: assign minimal scopes.
+- Monitor usage in the dashboard.
+- Enable IP whitelisting.
+
+<Callout kind="tip">
+Store secrets in environment variables like `process.env.API_KEY` or `os.getenv('API_KEY')`.
+</Callout>
+
+## Token Refresh
+
+<Expandable title="Advanced: Refreshing OAuth Tokens" default-open="false">
+
+OAuth access tokens expire after 1 hour. Use refresh tokens to obtain new ones.
+
+```javascript
+const refreshResponse = await fetch('https://auth.example.com/oauth/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({
+    grant_type: 'refresh_token',
+    refresh_token: 'YOUR_REFRESH_TOKEN',
+    client_id: 'YOUR_CLIENT_ID',
+    client_secret: 'YOUR_CLIENT_SECRET'
+  })
+});
+```
+
+Handle `401 Unauthorized` responses by automatically refreshing.
+
+</Expandable>

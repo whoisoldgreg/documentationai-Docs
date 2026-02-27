@@ -1,0 +1,152 @@
+---
+title: Core Features of Scriptmasters
+description: Learn about the essential tools in Scriptmasters for handling payments, analytics, and billing management.
+---
+
+## Overview
+
+Scriptmasters provides a comprehensive platform for enterprise payment processing, analytics, and billing management. You can accept various payment types, monitor transactions in real-time, set up recurring billing, and protect against fraud with built-in tools. These core features help you streamline operations and scale your business securely.
+
+<Columns cols={2}>
+  <Card title="Payment Processing" icon="credit-card" href="#payment-processing">
+    Accept cards, ACH, and digital wallets with fast settlements.
+  </Card>
+  <Card title="Real-time Dashboard" icon="bar-chart-3" href="#dashboard">
+    Gain insights into revenue, approvals, and trends instantly.
+  </Card>
+  <Card title="Recurring Billing" icon="repeat" href="#recurring">
+    Manage subscriptions with automated invoicing and dunning.
+  </Card>
+  <Card title="Chargeback Defense" icon="shield" href="#chargeback">
+    Monitor fraud 24/7 and resolve disputes efficiently.
+  </Card>
+</Columns>
+
+## Payment Processing
+
+Process payments securely across multiple methods including credit/debit cards, ACH transfers, and digital wallets like Apple Pay or Google Pay. Scriptmasters handles Level 2 and Level 3 data for optimal interchange rates.
+
+<Tabs>
+  <Tab title="Credit/Debit Cards" icon="credit-card">
+    Integrate card payments using our REST API. Capture full card details or use tokenized payments for PCI compliance.
+    
+    <CodeGroup tabs="JavaScript,cURL">
+      ```javascript
+      const response = await fetch('https://api.example.com/v1/charges', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${YOUR_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          amount: 2999, // $29.99 in cents
+          currency: 'usd',
+          source: 'tok_visa_example'
+        })
+      });
+      const charge = await response.json();
+      ```
+      ```bash
+      curl https://api.example.com/v1/charges \
+        -H "Authorization: Bearer YOUR_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "amount": 2999,
+          "currency": "usd",
+          "source": "tok_visa_example"
+        }'
+      ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="ACH/eCheck" icon="banknote">
+    Handle bank transfers with automated verification.
+    
+    <ParamField path="account_number" param-type="string" required="true">
+      Customer's bank account number.
+    </ParamField>
+    
+    <ParamField path="routing_number" param-type="string" required="true">
+      Bank's routing number (9 digits).
+    </ParamField>
+  </Tab>
+  <Tab title="Digital Wallets" icon="smartphone">
+    Support seamless one-click payments from stored methods.
+  </Tab>
+</Tabs>
+
+<Callout kind="tip">
+  Start with sandbox testing at `https://sandbox-api.example.com` before going live.
+</Callout>
+
+## Real-time Dashboard
+
+Access your dashboard at `https://dashboard.example.com` for CEO-level analytics. View revenue trends, transaction volumes, approval rates, and customer insights without delays.
+
+| Metric              | Description                          | Target          |
+|---------------------|--------------------------------------|-----------------|
+| Approval Rate       | Percentage of successful transactions| `>98%`         |
+| Average Response    | Time from request to approval        | `<2s`           |
+| Monthly Volume      | Total processed amount               | Track growth    |
+| Chargeback Ratio    | Disputes per 1000 transactions       | `<0.5%`         |
+
+Customize widgets to focus on key performance indicators relevant to your business.
+
+## Recurring Billing
+
+Set up subscriptions easily with flexible billing cycles, automated retries, and dunning emails.
+
+<Steps>
+  <Step title="Create Plan" icon="plus">
+    Define pricing tiers and intervals.
+    
+````json
+{
+  "name": "Premium Monthly",
+  "amount": 4999,
+  "interval": "month",
+  "interval_count": 1
+}
+````
+  </Step>
+  <Step title="Subscribe Customer" icon="user-plus">
+    Attach a customer to the plan using their payment method.
+  </Step>
+  <Step title="Monitor & Adjust" icon="settings">
+    Handle failed payments with built-in retry logic.
+  </Step>
+</Steps>
+
+## Chargeback Defense
+
+Scriptmasters offers 24/7 fraud monitoring, AI-assisted dispute tools, and chargeback guarantees. Receive alerts for suspicious activity and automate responses with pre-filled templates.
+
+<Expandable title="Advanced Fraud Rules" default-open="false">
+  Configure custom rules based on velocity, amount, or IP location.
+  
+  ```javascript
+  const rule = {
+    name: "High Velocity Check",
+    conditions: [
+      { type: "count", period: "1h", threshold: 5 }
+    ],
+    action: "block"
+  };
+  ```
+</Expandable>
+
+<Callout kind="success">
+  Merchants using chargeback defense recover up to 70% more revenue.
+</Callout>
+
+## Next Steps
+
+Explore deeper integrations or contact support to customize these features for your needs.
+
+<Columns cols={2}>
+  <Card title="API Reference" icon="code" href="/authentication">
+    Full API documentation and SDKs.
+  </Card>
+  <Card title="Get Support" icon="headphones" href="https://dashboard.example.com/support">
+    24/7 assistance from our team.
+  </Card>
+</Columns>

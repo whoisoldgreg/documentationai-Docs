@@ -1,0 +1,134 @@
+---
+title: Changelog
+description: Stay updated with the latest releases, feature additions, and improvements in Scriptmasters.
+---
+
+## Overview
+
+Scriptmasters releases updates regularly to enhance payment processing, analytics, and security features. You receive notifications via email and the dashboard when new versions deploy automatically. Review changes below to understand impacts on your integrations.
+
+<Callout kind="info">
+Check the <a href="https://dashboard.example.com/updates">dashboard updates page</a> for deployment status and rollback options if needed.
+</Callout>
+
+## Recent Releases
+
+| Version | Date       | Key Changes                  | Tags              |
+|---------|------------|------------------------------|-------------------|
+| v2.1.0  | 2024-11-15 | Enhanced analytics dashboard | feature, improvement |
+| v2.0.0  | 2024-10-10 | New recurring billing        | feature, breaking |
+| v1.9.0  | 2024-09-05 | Improved fraud detection     | improvement, bugfix |
+
+<Update label="2024-11-15" description="v2.1.0" tags={["feature", "improvement"]}>
+
+## New Features
+
+- Added advanced analytics dashboard with revenue trends, transaction volume visualizations, and customer insights.
+- Introduced real-time approval rate metrics and exportable reports in CSV and PDF formats.
+
+## Improvements
+
+- Optimized dashboard load times by `>40%` for large merchant datasets.
+- Enhanced mobile responsiveness for on-the-go payment monitoring.
+
+## Bug Fixes
+
+- Fixed intermittent chart rendering issues in analytics views.
+- Resolved data sync delays between API and dashboard.
+
+</Update>
+
+<Update label="2024-10-10" description="v2.0.0" tags={["feature", "breaking"]}>
+
+## New Features
+
+- Launched flexible recurring billing with automated invoicing, dunning sequences, and custom billing frequencies.
+- Added support for subscription pausing, prorated refunds, and webhook notifications for billing events.
+
+## Breaking Changes
+
+- Updated API endpoints for billing: `/v1/billing` now requires `{merchantId}` path parameter.
+- Deprecated legacy recurring endpoints; migrate using the guide below.
+
+<CodeGroup tabs="JavaScript,cURL">
+````javascript
+// New endpoint usage
+const response = await fetch('https://api.example.com/v2/billing/{merchantId}/subscriptions', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${YOUR_TOKEN}` },
+  body: JSON.stringify({ plan: 'monthly', amount: 99.99 })
+});
+````
+````bash
+curl -X POST "https://api.example.com/v2/billing/{merchantId}/subscriptions" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"plan": "monthly", "amount": 99.99}'
+````
+</CodeGroup>
+
+## Bug Fixes
+
+- Corrected token refresh logic in SDKs during long-running billing operations.
+
+</Update>
+
+<Update label="2024-09-05" description="v1.9.0" tags={["improvement", "bugfix"]}>
+
+## Improvements
+
+- Upgraded fraud detection algorithms with AI-assisted scoring and 24/7 monitoring.
+- Integrated Level 2/3 data processing for better B2B interchange rates.
+
+## Bug Fixes
+
+- Fixed chargeback dispute API response parsing errors.
+- Resolved performance bottlenecks in high-volume transaction processing (`<2s` average response time restored).
+
+## Performance Optimizations
+
+- Reduced API latency by optimizing database queries for merchant reports.
+
+</Update>
+
+## Upgrade Instructions
+
+Follow these steps to ensure smooth updates:
+
+<Steps>
+  <Step title="Review Changes" icon="book-open">
+
+  Read release notes above and test in staging environment.
+
+  </Step>
+  <Step title="Update Integrations" icon="code">
+
+  ```bash
+  npm update @scriptmasters/sdk
+  ```
+
+  Adjust code for breaking changes if applicable.
+
+  </Step>
+  <Step title="Deploy & Monitor" icon="rocket">
+
+  Redeploy your application and monitor the dashboard for `99.99%` uptime.
+
+  </Step>
+</Steps>
+
+<Columns cols={3}>
+  <Card title="API Reference" icon="api" href="/authentication">
+    Full endpoint details and SDK examples.
+  </Card>
+  <Card title="Quickstart" icon="zap" href="/quickstart">
+    Set up payments in minutes.
+  </Card>
+  <Card title="Support" icon="help-circle" href="https://dashboard.example.com/support">
+    Contact dedicated support.
+  </Card>
+</Columns>
+
+<Callout kind="tip">
+Subscribe to RSS feed at `/changelog/feed.xml` for instant update notifications.
+</Callout>

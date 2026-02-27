@@ -1,0 +1,110 @@
+---
+title: Introduction to Scriptmasters
+description: Discover Scriptmasters, a comprehensive enterprise payment processing and analytics platform designed to help businesses accept payments securely and gain actionable insights.
+---
+
+<Callout kind="info" title="Starter Kit Template">
+  This documentation was generated as a starter kit template based on your brand. Please review and customize the content to accurately reflect your product's features, APIs, and capabilities.
+</Callout>
+
+## Overview
+
+Scriptmasters provides enterprise-grade payment processing and analytics to help you accept payments securely, manage merchants efficiently, and gain real-time insights into your business performance. With PCI Level 1 certification, 99.99% uptime, and 24/7 support, you can focus on growth while Scriptmasters handles the complexities of payments.
+
+Process credit cards, ACH, eChecks, and digital wallets with competitive rates. Access CEO-level dashboards for revenue trends, transaction volumes, and approval rates. Benefit from fraud protection, chargeback defense, and recurring billing tools—all in one platform.
+
+## Key Features
+
+<Columns cols={3}>
+  <Card title="Payment Processing" icon="credit-card" href="#payment-processing">
+    Accept all major payment types including Visa, Mastercard, ACH, and digital wallets. Get fast settlements and optimal interchange rates with Level 2/3 processing.
+  </Card>
+  <Card title="Real-time Analytics" icon="bar-chart-3" href="#analytics">
+    Monitor revenue trends, approval rates, and customer insights through an intuitive dashboard. Make data-driven decisions instantly.
+  </Card>
+  <Card title="Fraud Protection" icon="shield" href="#security">
+    Enjoy 24/7 monitoring, AI-assisted chargeback management, and enterprise security to protect your revenue.
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="Recurring Billing" icon="repeat" href="#billing">
+    Set up flexible subscriptions with automated invoicing and dunning for any billing cycle.
+  </Card>
+  <Card title="Developer APIs" icon="code" href="/quickstart">
+    Integrate seamlessly using RESTful APIs and SDKs tailored for custom payment flows.
+  </Card>
+</Columns>
+
+## Quick Start
+
+Get up and running with Scriptmasters in minutes.
+
+<Steps>
+  <Step title="Create Account" icon="user-plus">
+    Sign up at `https://dashboard.scriptmasters.com` and verify your email.
+  </Step>
+  <Step title="Get API Key" icon="key">
+    Navigate to the developer section to generate your `{API_KEY}`.
+  </Step>
+  <Step title="Make First Payment" icon="zap">
+    Use this example to process a test transaction:
+
+    <CodeGroup tabs="JavaScript,cURL">
+      ```javascript
+      const response = await fetch('https://api.example.com/v1/payments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${YOUR_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          amount: 1000,
+          currency: 'USD',
+          card: {
+            number: '4111111111111111',
+            exp_month: 12,
+            exp_year: 2025,
+            cvc: '123'
+          }
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+      ```
+      ```bash
+      curl -X POST https://api.example.com/v1/payments \
+        -H "Authorization: Bearer YOUR_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "amount": 1000,
+          "currency": "USD",
+          "card": {
+            "number": "4111111111111111",
+            "exp_month": 12,
+            "exp_year": 2025,
+            "cvc": "123"
+          }
+        }'
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+## Next Steps
+
+<Columns cols={3}>
+  <Card title="Quickstart Guide" icon="book-open" href="/quickstart">
+    Dive into full setup and your first integration.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/authentication">
+    Secure your API access with keys and tokens.
+  </Card>
+  <Card title="API Reference" icon="code" href="/quickstart">
+    Explore all endpoints and parameters.
+  </Card>
+</Columns>
+
+<Callout kind="tip">
+  Start with the <a href="/quickstart">Quickstart Guide</a> to process your first payment today.
+</Callout>

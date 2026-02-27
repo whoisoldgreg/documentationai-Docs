@@ -1,0 +1,211 @@
+---
+title: Getting Started with Scriptmasters
+description: Quickly set up your Scriptmasters account, access the dashboard, and process your first test transaction.
+---
+
+## Prerequisites
+
+<Callout kind="info" title="Before You Begin">
+
+To get started with Scriptmasters, ensure you have:
+
+- A valid email address for account registration
+- Business details for verification (EIN or tax ID if applicable)
+- Test credit card numbers for sandbox transactions (provided in dashboard)
+
+Review Scriptmasters's [terms of service](https://docs.scriptmasters.com/terms).
+
+</Callout>
+
+## Create and Verify Your Account
+
+Follow these steps to register and set up your Scriptmasters account.
+
+<Steps>
+  <Step title="Sign Up" icon="user-plus">
+
+  Visit `https://dashboard.scriptmasters.com/register` and provide your business email, name, and password.
+
+  Complete the captcha and submit the form.
+
+  </Step>
+
+  <Step title="Verify Email" icon="mail">
+
+  Check your inbox for a verification email from Scriptmasters.
+
+  Click the verification link to activate your account.
+
+  <Callout kind="tip">
+
+  Emails may land in spam—check there if needed.
+
+  </Callout>
+
+  </Step>
+
+  <Step title="Complete Onboarding" icon="clipboard-list">
+
+  Log in at `https://dashboard.scriptmasters.com/login`.
+
+  Fill out business details: company name, address, and payment processing needs.
+
+  Submit for review (approval typically within 24 hours).
+
+  </Step>
+</Steps>
+
+## Log In and Initial Dashboard Setup
+
+Once verified, access your dashboard.
+
+1. Navigate to `https://dashboard.scriptmasters.com`.
+2. Enter your credentials.
+3. On first login, set your time zone and currency preferences.
+
+<Callout kind="success">
+
+Your dashboard provides real-time analytics, transaction history, and configuration tools.
+
+</Callout>
+
+## Configure Basic Payment Methods
+
+Enable payment methods in your dashboard under **Settings > Payment Methods**.
+
+<Tabs>
+  <Tab title="Credit/Debit Cards" icon="credit-card">
+
+  Toggle **Cards** to enabled.
+
+  Select supported networks: Visa, Mastercard, Amex.
+
+  Set test mode to `true` for sandbox.
+
+  ```json
+  {
+    "cards": {
+      "enabled": true,
+      "networks": ["visa", "mastercard", "amex"],
+      "test_mode": true
+    }
+  }
+  ```
+
+  </Tab>
+
+  <Tab title="ACH/eCheck" icon="banknote">
+
+  Enable **ACH** processing.
+
+  Configure settlement days (default: 2).
+
+  Add your bank details for payouts.
+
+  ```json
+  {
+    "ach": {
+      "enabled": true,
+      "settlement_days": 2,
+      "bank_account": "YOUR_BANK_ACCOUNT"
+    }
+  }
+  ```
+
+  </Tab>
+</Tabs>
+
+## Run Your First Test Transaction
+
+Use the API to process a test payment. Replace `YOUR_API_KEY` with your key from **Settings > API Keys**.
+
+<Request tabs="cURL,JavaScript" show-lines="true">
+  ```bash
+  curl https://api.example.com/v1/payments \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "amount": 10.00,
+      "currency": "USD",
+      "card": {
+        "number": "4111111111111111",
+        "exp_month": 12,
+        "exp_year": 2025,
+        "cvc": "123"
+      },
+      "test": true
+    }'
+  ```
+  ```javascript
+  const response = await fetch('https://api.example.com/v1/payments', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      amount: 10.00,
+      currency: 'USD',
+      card: {
+        number: '4111111111111111',
+        exp_month: 12,
+        exp_year: 2025,
+        cvc: '123'
+      },
+      test: true
+    })
+  });
+  const data = await response.json();
+  console.log(data);
+  ```
+</Request>
+
+<Response tabs="Success,Error">
+```json
+{
+  "id": "pay_abc123",
+  "status": "succeeded",
+  "amount": 10.00,
+  "currency": "USD"
+}
+```
+
+```json
+{
+  "error": {
+    "type": "invalid_request_error",
+    "message": "Invalid card number"
+  }
+}
+```
+</Response>
+
+<Callout kind="tip">
+
+Use test cards like `4111111111111111` (Visa) for successful charges. View results in your dashboard.
+
+</Callout>
+
+## Next Steps
+
+<Columns cols={3}>
+  <Card title="Authentication" icon="shield" href="/authentication">
+    Secure your API with keys and webhooks.
+  </Card>
+
+  <Card title="Dashboard Guide" icon="layout-dashboard" href="/dashboard">
+    Explore analytics and reporting.
+  </Card>
+
+  <Card title="Production Setup" icon="rocket" href="/production">
+    Go live with real payments.
+  </Card>
+</Columns>
+
+<Expandable title="Troubleshooting Common Issues" default-open="false">
+
+- **API Key Errors**: Regenerate in dashboard.
+- **Test Mode Stuck**: Toggle in settings.
+- **Email Not Received**: Contact support@scriptmasters.com.
+
+</Expandable>
